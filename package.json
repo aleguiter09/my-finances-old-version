@@ -7,11 +7,10 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.12",
-    "@chakra-ui/react": "^2.3.7",
+    "@chakra-ui/react": "^2.4.2",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@fontsource/heebo": "^4.5.14",
-    "@fontsource/noto-sans-mono": "^4.5.12",
+    "@fontsource/rubik": "^4.5.11",
     "framer-motion": "^6.5.1",
     "next": "latest",
     "react": "18.2.0",
