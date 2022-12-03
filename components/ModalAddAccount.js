@@ -1,12 +1,12 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
   Button,
   Input,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 
@@ -16,7 +16,9 @@ export const ModalAddAccount = ({ isOpen, onClose, onConfirm }) => {
 
   const handleConfirm = () => {
     const title = titleRef.current.value;
-    const amount = parseFloat(amountRef.current.value);
+    const amount = parseFloat(
+      amountRef.current.value ? amountRef.current.value : 0
+    );
     if (title !== "") {
       const newAccount = {
         title,
@@ -28,11 +30,11 @@ export const ModalAddAccount = ({ isOpen, onClose, onConfirm }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
-        <ModalContent w="90%">
-          <ModalHeader>Add Account</ModalHeader>
-          <ModalBody>
+      <Drawer placement="bottom" isOpen={isOpen} onClose={onClose}>
+        <DrawerOverlay backdropFilter="blur(5px)" />
+        <DrawerContent>
+          <DrawerHeader>Add Account</DrawerHeader>
+          <DrawerBody>
             <Input placeholder="Title" mb="3" rounded="3" ref={titleRef} />
             <Input
               placeholder="Amount"
@@ -40,16 +42,16 @@ export const ModalAddAccount = ({ isOpen, onClose, onConfirm }) => {
               rounded="3"
               ref={amountRef}
             />
-          </ModalBody>
+          </DrawerBody>
 
-          <ModalFooter>
+          <DrawerFooter>
             <Button colorScheme="blue" mr="3" onClick={onClose}>
               Close
             </Button>
             <Button onClick={handleConfirm}>Confirm</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 };
