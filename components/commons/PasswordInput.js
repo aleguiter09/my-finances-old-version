@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Input, Button, InputGroup, InputRightElement } from "@chakra-ui/react";
 
-export const PasswordInput = () => {
+export const PasswordInput = ({ onChange }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -12,6 +12,7 @@ export const PasswordInput = () => {
         type={show ? "text" : "password"}
         placeholder="Password"
         rounded={3}
+        onChange={(p) => onChange(p.target.value)}
       />
       <InputRightElement width="3.2rem">
         <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
