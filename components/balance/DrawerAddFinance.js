@@ -26,13 +26,17 @@ export const DrawerAddFinance = ({
 
   const handleConfirm = () => {
     const account = accountRef.current.value;
+    const category = categoryRef?.current?.value
+      ? categoryRef.current.value
+      : "";
     const amount = parseFloat(amountRef.current.value);
-    if (account !== "") {
-      const newAccount = {
-        title: account,
+    if (account !== "" && category !== "" && amount > 0) {
+      const newExpense = {
+        accountTitle: account,
+        categoryTitle: category,
         amount,
       };
-      onConfirm(newAccount);
+      onConfirm(newExpense);
     }
   };
 
@@ -53,16 +57,18 @@ export const DrawerAddFinance = ({
                 ))}
               </Select>
             </label>
-            <label>
-              <Text fontWeight="bold">Category</Text>
-              <Select ref={categoryRef} mt="1" mb="2">
-                {categories.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </Select>
-            </label>
+            {categories && (
+              <label>
+                <Text fontWeight="bold">Category</Text>
+                <Select ref={categoryRef} mt="1" mb="2">
+                  {categories.map((c) => (
+                    <option key={c.title} value={c.title}>
+                      {c.title}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+            )}
             <label>
               <Text fontWeight="bold">Amount</Text>
               <Input

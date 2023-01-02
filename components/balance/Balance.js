@@ -1,11 +1,10 @@
-import { Flex, Button, Heading, useDisclosure } from "@chakra-ui/react";
-import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { Flex, Button, useDisclosure, Text } from "@chakra-ui/react";
+import { AddIcon, MinusIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { CardComponent, CardButtonComponent } from "../commons/CardComponent";
 import { ModalAddAccount } from "./ModalAddAccount";
 import { DrawerAddFinance } from "./DrawerAddFinance";
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import { ExpensesChart } from "../commons/ExpensesChart/ExpensesChart";
 
 const Balance = () => {
   const {
@@ -39,21 +38,27 @@ const Balance = () => {
     { title: "Belo", amount: 0 },
   ];
 
-  const categoriesDefault = ["Food", "House", "Cat"];
-  const categoriesDefaultWithValues = [
-    { title: "Food", amount: 30000 },
-    { title: "House Pago", amount: 12000 },
-    { title: "Cat", amount: 0 },
+  const categoriesDefault = [
+    { title: "Food", amount: 30000, color: "yellow.500" },
+    { title: "House", amount: 15000, color: "green.500" },
+    { title: "Cat", amount: 91000, color: "red.500" },
+    { title: "Market", amount: 10000, color: "blue.500" },
   ];
 
   const [total, setTotal] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
   const [accounts, setAccounts] = useState(accountsDefault);
+  const [categories, setCategories] = useState(categoriesDefault);
 
   useEffect(() => {
     let sum = 0;
     accounts.forEach((acc) => (sum += acc.amount));
     setTotal(sum);
-  }, [accounts]);
+
+    sum = 0;
+    categories.forEach((c) => (sum += c.amount));
+    setTotalExpenses(sum);
+  }, [accounts, categories]);
 
   const handleAddAccount = (newAccount = {}) => {
     if (newAccount.title && newAccount.title !== "") {
@@ -62,19 +67,32 @@ const Balance = () => {
     }
   };
 
-  const handleAddExpense = (updatedAccount = {}) => {
+  const handleAddCategory = (newCategory = {}) => {
+    if (newCategory.title && newCategory.title !== "") {
+      setCategories([...categories, newCategory]);
+    }
+  };
+
+  const handleAddExpense = (newExpense = {}) => {
     accounts.map((acc) => {
-      if (acc.title === updatedAccount.title) {
-        acc.amount -= updatedAccount.amount;
+      if (acc.title === newExpense.accountTitle) {
+        acc.amount -= newExpense.amount;
       }
     });
     setAccounts([...accounts]);
+
+    categories.map((cat) => {
+      if (cat.title === newExpense.categoryTitle) {
+        cat.amount += newExpense.amount;
+      }
+    });
+    setCategories([...categories]);
     onAddExpenseClose();
   };
 
   const handleAddIncome = (updatedAccount = {}) => {
     accounts.map((acc) => {
-      if (acc.title === updatedAccount.title) {
+      if (acc.title === updatedAccount.accountTitle) {
         acc.amount += updatedAccount.amount;
       }
     });
@@ -84,30 +102,6 @@ const Balance = () => {
 
   const handleDelete = (title) => {
     setAccounts(accounts.filter((a) => a.title !== title));
-  };
-
-  const options = {
-    series: [44, 55, 30],
-    labels: categoriesDefault,
-    chart: {
-      width: 380,
-      type: "pie",
-    },
-    dataLabels: {
-      enabled: true,
-    },
-    legend: {
-      position: "bottom",
-      height: 50,
-    },
-    dropShadow: {
-      enabled: true,
-    },
-    plotOptions: {
-      pie: {
-        expandOnClick: false,
-      },
-    },
   };
 
   return (
@@ -123,7 +117,7 @@ const Balance = () => {
         onConfirm={handleAddExpense}
         title={"Expense"}
         accounts={accounts}
-        categories={categoriesDefault}
+        categories={categories}
       />
       <DrawerAddFinance
         isOpen={isAddIncomeOpen}
@@ -131,11 +125,18 @@ const Balance = () => {
         onConfirm={handleAddIncome}
         title={"Income"}
         accounts={accounts}
-        categories={categoriesDefault}
       />
-      <Heading size="lg" ms="2">
-        Balance: ${total.toFixed(1)}
-      </Heading>
+      <Flex justifyContent="space-between" mx="5">
+        <Text mt="2" fontSize="lg">
+          Balance: ${total.toFixed(1)}
+        </Text>
+        <Flex bg="gray.500" rounded="25" p="2" cursor="pointer">
+          <Text fontSize="sm" ps="1">
+            Details
+          </Text>
+          <ChevronRightIcon ms="1" pt="1" fontSize="lg" />
+        </Flex>
+      </Flex>
       <Flex my="4" overflowX="auto">
         {accounts.map((acc) => (
           <CardComponent
@@ -148,11 +149,10 @@ const Balance = () => {
         <CardButtonComponent handleClick={onAddAccountOpen} />
       </Flex>
       <Flex direction="column" align="center">
-        <Chart
-          options={options}
-          series={options.series}
-          type="pie"
-          width="400"
+        <ExpensesChart
+          categories={categories}
+          total={totalExpenses}
+          handleAddCategory={handleAddCategory}
         />
         <Flex mt="3">
           <Button

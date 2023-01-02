@@ -14,9 +14,10 @@ import { PasswordInput } from "../components/commons/PasswordInput";
 const Home = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSignIn = () => {
-    if (email !== "") {
+    if (email !== "" && password !== "") {
       router.push(`/home/${email}`);
     }
   };
@@ -43,7 +44,7 @@ const Home = () => {
               rounded="3"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <PasswordInput />
+            <PasswordInput onChange={setPassword} />
             <Button mb="3" onClick={handleSignIn} rounded="25">
               Sign In
             </Button>
