@@ -10,7 +10,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { PasswordInput } from "../components/commons/PasswordInput";
-import { registerUser } from "../api/auth/register";
+// import { registerUser } from "../api/auth/register";
 
 const Register = () => {
   const router = useRouter();
