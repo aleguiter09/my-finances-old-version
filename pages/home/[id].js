@@ -12,7 +12,7 @@ const Home = () => {
   };
 
   return (
-    <Flex direction="column" height="100vh" pt="4">
+    <Flex direction="column" pt="4">
       <Balance />
       <Credit />
       <Button onClick={handleBack} mx="2">

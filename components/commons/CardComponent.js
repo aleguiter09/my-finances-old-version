@@ -26,7 +26,7 @@ export const CardComponent = ({ title, amount, handleDelete }) => {
         onClose={onClose}
         onClickDelete={onClickDelete}
       />
-      <Card minWidth="150" mx="2">
+      <Card minWidth="150" mx="2" color={amount >= 0 ? "white" : "red.400"}>
         <Flex justifyContent="end">
           <DeleteIcon
             fontSize="xs"
