@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { AuthProvider } from "../context/AuthContext";
 import "@fontsource/rubik/300.css";
 
 const config = {
@@ -21,7 +22,9 @@ const App = ({ Component, pageProps }) => {
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/static/apple-touch-icon.png" />
       </Head>
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
     </ChakraProvider>
   );
 };

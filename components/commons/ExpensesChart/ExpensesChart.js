@@ -1,12 +1,12 @@
-import { Flex, Box, Text, Button, Input } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon, AddIcon } from "@chakra-ui/icons";
+import { AddCategoryButton } from "./AddCategoryButton";
+import { ExpenseBar } from "./ExpensesBar";
 
-export const ExpensesChart = ({ categories, total, handleAddCategory }) => {
+export const ExpensesChart = ({ categories, total }) => {
   const [currentYear, setCurrentYear] = useState(2023);
   const [currentMonth, setCurrentMonth] = useState(0);
-  const [addCategory, setAddCategory] = useState(false);
-  const [newCategoryTitle, setNewCategoryTitle] = useState("");
 
   const months = [
     "January",
@@ -31,6 +31,7 @@ export const ExpensesChart = ({ categories, total, handleAddCategory }) => {
       setCurrentMonth(currentMonth - 1);
     }
   };
+
   const onRightClick = () => {
     if (currentMonth === 11) {
       setCurrentYear(currentYear + 1);
@@ -38,18 +39,6 @@ export const ExpensesChart = ({ categories, total, handleAddCategory }) => {
     } else {
       setCurrentMonth(currentMonth + 1);
     }
-  };
-
-  const onClickAddCategory = () => {
-    if (addCategory) {
-      const newCategory = {
-        title: newCategoryTitle,
-        amount: 0,
-      };
-      handleAddCategory(newCategory);
-      setNewCategoryTitle("");
-    }
-    setAddCategory(!addCategory);
   };
 
   return (
@@ -69,46 +58,16 @@ export const ExpensesChart = ({ categories, total, handleAddCategory }) => {
         <ChevronRightIcon fontSize="2xl" onClick={onRightClick} />
       </Flex>
       {categories.map((c) => (
-        <Flex mb="2">
-          <Box
-            ps="2"
-            w={`${(c.amount * 100) / total}%`}
-            h="25"
-            bg={c.color ? c.color : "blue.400"}
-          >
-            <Text w="fit-content" whiteSpace="nowrap">
-              {c.title} - ${c.amount}
-            </Text>
-          </Box>
-        </Flex>
+        <ExpenseBar id={c.id} key={c.id} category={c} total={total} />
       ))}
-      {addCategory && (
-        <Flex mb="2">
-          <Input
-            ps="2"
-            h="25"
-            bg="blue.500"
-            rounded="0"
-            onChange={(c) => setNewCategoryTitle(c.target.value)}
-          />
-        </Flex>
-      )}
-      <Flex>
-        <Button
-          size="sm"
-          colorScheme={addCategory ? "green" : "blue"}
-          my="2"
-          onClick={onClickAddCategory}
-        >
-          <AddIcon me="3" fontSize="xs" />
-          <Text fontSize="sm">Add category</Text>
-        </Button>
+      <Flex justify="center">
+        <AddCategoryButton />
       </Flex>
       <Flex justifyContent="space-between">
         <Text size="sm" mt="2">
           Expenses: ${total.toFixed(1)}
         </Text>
-        <Flex bg="gray.500" rounded="25" p="2" cursor="pointer">
+        <Flex bg="gray.600" rounded="25" p="2" cursor="pointer">
           <Text fontSize="xs" ps="1">
             Details
           </Text>

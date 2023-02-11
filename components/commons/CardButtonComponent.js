@@ -7,29 +7,46 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
+  Card,
+  CardBody,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import { useRef } from "react";
+import { insertAccount } from "../../api/database";
+import { useFinancesContext } from "../../context/FinancesContext";
 
-export const ModalAddAccount = ({ isOpen, onClose, onConfirm }) => {
+export const CardButtonComponent = ({}) => {
+  const { updateAccounts } = useFinancesContext();
   const titleRef = useRef();
   const amountRef = useRef();
 
-  const handleConfirm = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleConfirm = async () => {
     const title = titleRef.current.value;
     const amount = parseFloat(
       amountRef.current.value ? amountRef.current.value : 0
     );
-    if (title !== "") {
-      const newAccount = {
+    if (title) {
+      await insertAccount({
         title,
         amount,
-      };
-      onConfirm(newAccount);
+      });
+      updateAccounts();
     }
+    onClose();
   };
 
   return (
     <>
+      <Card minWidth="120" mx="2">
+        <CardBody align="center" mt="1">
+          <Button onClick={onOpen} rounded="25">
+            <AddIcon />
+          </Button>
+        </CardBody>
+      </Card>
       <Drawer placement="bottom" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay backdropFilter="blur(5px)" />
         <DrawerContent>
@@ -45,10 +62,18 @@ export const ModalAddAccount = ({ isOpen, onClose, onConfirm }) => {
           </DrawerBody>
 
           <DrawerFooter>
-            <Button colorScheme="blue" mr="3" onClick={onClose}>
+            <Button
+              fontSize="sm"
+              p="3"
+              colorScheme="blue"
+              mr="3"
+              onClick={onClose}
+            >
               Close
             </Button>
-            <Button onClick={handleConfirm}>Confirm</Button>
+            <Button fontSize="sm" p="3" onClick={handleConfirm}>
+              Confirm
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

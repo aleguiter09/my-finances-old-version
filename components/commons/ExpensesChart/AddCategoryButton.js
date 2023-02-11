@@ -1,4 +1,4 @@
-import { deleteCategory, updateCategory } from "../../../api/database";
+import { insertCategory } from "../../../api/database";
 import {
   Button,
   Input,
@@ -11,13 +11,17 @@ import {
   DrawerContent,
   Flex,
   SimpleGrid,
-  useDisclosure,
   Box,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useState, useRef } from "react";
+import { AddIcon } from "@chakra-ui/icons";
+import { useRef, useState } from "react";
 import { useFinancesContext } from "../../../context/FinancesContext";
 
-export const ExpenseBar = ({ id, category, total }) => {
+export const AddCategoryButton = ({}) => {
+  const { updateCategories } = useFinancesContext();
+  const [color, setColor] = useState("gray.500");
+
   const colors = [
     "red.500",
     "gray.500",
@@ -32,61 +36,39 @@ export const ExpenseBar = ({ id, category, total }) => {
   ];
 
   const titleRef = useRef();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { updateCategories } = useFinancesContext();
-  const [color, setColor] = useState(category.color);
 
   const handleConfirm = async () => {
     const title = titleRef.current.value;
     if (title) {
-      await updateCategory(id, {
+      await insertCategory({
         title,
         color,
+        amount: 0,
       });
+      updateCategories();
     }
-    updateCategories();
-    onClose();
-  };
-
-  const handleDelete = async () => {
-    await deleteCategory(id);
-    updateCategories();
     onClose();
   };
 
   return (
     <>
-      <Flex mb="2" key={category.id}>
-        <Box
-          ps="2"
-          w={`${(category.amount * 100) / total}%`}
-          h="25"
-          bg={category.color ? category.color : "blue.500"}
-          onClick={onOpen}
-        >
-          <Text w="fit-content" whiteSpace="nowrap">
-            {category.title} - ${category.amount}
-          </Text>
-        </Box>
-      </Flex>
-
+      <Button size="sm" colorScheme="blue" my="2" onClick={onOpen}>
+        <AddIcon me="3" fontSize="xs" />
+        <Text fontSize="sm">Add category</Text>
+      </Button>
       <Drawer placement="bottom" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay backdropFilter="blur(5px)" />
         <DrawerContent>
           <DrawerHeader fontSize="lg" pb="0" textAlign="center">
-            Edit Category
+            Add Category
           </DrawerHeader>
           <DrawerBody>
             <Text fontWeight="bold" mb="2">
               Title
             </Text>
-            <Input
-              placeholder="Title"
-              mb="3"
-              rounded="3"
-              ref={titleRef}
-              defaultValue={category.title}
-            />
+            <Input placeholder="Title" mb="3" rounded="3" ref={titleRef} />
             <Flex mb="2">
               <Text fontWeight="bold">Color: </Text>
               <Text
@@ -116,15 +98,6 @@ export const ExpenseBar = ({ id, category, total }) => {
           </DrawerBody>
 
           <DrawerFooter>
-            <Button
-              fontSize="sm"
-              p="3"
-              colorScheme="red"
-              onClick={handleDelete}
-              me="auto"
-            >
-              Delete
-            </Button>
             <Button
               fontSize="sm"
               p="3"

@@ -10,7 +10,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { PasswordInput } from "../components/commons/PasswordInput";
-// import { registerUser } from "../api/auth/register";
+import { register } from "../api/auth";
 
 const Register = () => {
   const router = useRouter();
@@ -20,15 +20,14 @@ const Register = () => {
   const handleClick = async () => {
     if (email !== "" && password !== "") {
       try {
-        /*registerUser(email, password).then((res) => {
+        register(email, password).then((res) => {
           if (res.error) {
             throw res.error;
           } else {
-            console.log(res);
+            console.log("res:", res);
             router.push(`/home/${email}`);
           }
-        });*/
-        router.push(`/home/${email}`);
+        });
       } catch (e) {
         console.error("Error:", e);
       }
@@ -47,7 +46,7 @@ const Register = () => {
             <Heading fontWeight="bold" mb="3">
               Create account
             </Heading>
-            <Image src="./register.png" boxSize="300px" mx="auto" />
+            <Image src="./register.png" boxSize="250px" mx="auto" />
           </Flex>
           <Spacer />
           <Flex direction="column" p="4">

@@ -10,6 +10,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import { PasswordInput } from "../components/commons/PasswordInput";
+import { login } from "../api/auth";
 
 const Home = () => {
   const router = useRouter();
@@ -17,8 +18,18 @@ const Home = () => {
   const [password, setPassword] = useState("");
 
   const handleSignIn = () => {
-    if (email !== "" && password !== "") {
-      router.push(`/home/${email}`);
+    if (email && password) {
+      try {
+        login(email, password).then((res) => {
+          if (res.error) {
+            throw res.error;
+          } else {
+            router.push(`/home/${email}`);
+          }
+        });
+      } catch (e) {
+        console.error("Error:", e);
+      }
     }
   };
 
@@ -33,7 +44,7 @@ const Home = () => {
           <Flex direction="column" m="3">
             <Heading fontWeight="bold">Welcome!</Heading>
             <Text mb="6">Please... sign in</Text>
-            <Image src="./login.png" boxSize="300px" mx="auto" />
+            <Image src="./login.png" boxSize="250px" mx="auto" />
           </Flex>
           <Spacer />
           <Flex direction="column" p="4" mt="-5">

@@ -4,36 +4,23 @@ import {
   Stat,
   StatLabel,
   StatNumber,
-  Button,
   Flex,
-  useDisclosure,
 } from "@chakra-ui/react";
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 import { AlertComponent } from "./AlertComponent";
 
-export const CardComponent = ({ title, amount, handleDelete }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const onClickDelete = () => {
-    handleDelete(title);
-    onClose();
-  };
-
+export const CardComponent = ({ key, title, amount }) => {
   return (
     <>
-      <AlertComponent
-        isOpen={isOpen}
-        onClose={onClose}
-        onClickDelete={onClickDelete}
-      />
-      <Card minWidth="150" mx="2" color={amount >= 0 ? "white" : "red.400"}>
+      <Card minWidth="150" mx="2" color={amount >= 0 ? "white" : "red.500"}>
         <Flex justifyContent="end">
-          <DeleteIcon
-            fontSize="xs"
+          <AlertComponent id={key} />
+          <EditIcon
+            fontSize="sm"
             mt="2"
             me="2"
             cursor="pointer"
-            onClick={onOpen}
+            // onClick={onOpen}
           />
         </Flex>
         <CardBody pt="0">
@@ -44,17 +31,5 @@ export const CardComponent = ({ title, amount, handleDelete }) => {
         </CardBody>
       </Card>
     </>
-  );
-};
-
-export const CardButtonComponent = ({ handleClick }) => {
-  return (
-    <Card minWidth="120" mx="2">
-      <CardBody align="center" mt="1">
-        <Button onClick={handleClick} rounded="25">
-          <AddIcon />
-        </Button>
-      </CardBody>
-    </Card>
   );
 };
