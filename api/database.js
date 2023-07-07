@@ -22,17 +22,21 @@ export const deleteAccount = async (accId) => {
 
   const promises = [];
 
-  expenses.forEach((exp) => {
-    promises.push(
-      supabase.from("expense").update({ account: null }).eq("id", exp.id)
-    );
-  });
+  if (expenses) {
+    expenses.forEach((exp) => {
+      promises.push(
+        supabase.from("expense").update({ account: null }).eq("id", exp.id)
+      );
+    });
+  }
 
-  incomes.forEach((inc) => {
-    promises.push(
-      supabase.from("income").update({ account: null }).eq("id", inc.id)
-    );
-  });
+  if (incomes) {
+    incomes.forEach((inc) => {
+      promises.push(
+        supabase.from("income").update({ account: null }).eq("id", inc.id)
+      );
+    });
+  }
 
   await Promise.all(promises);
 
@@ -60,11 +64,13 @@ export const deleteCategory = async (catId) => {
 
   const promises = [];
 
-  expenses.forEach((exp) => {
-    promises.push(
-      supabase.from("expense").update({ category: null }).eq("id", exp.id)
-    );
-  });
+  if (expenses) {
+    expenses.forEach((exp) => {
+      promises.push(
+        supabase.from("expense").update({ category: null }).eq("id", exp.id)
+      );
+    });
+  }
 
   await Promise.all(promises);
 

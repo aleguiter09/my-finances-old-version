@@ -64,7 +64,6 @@ export const DrawerAddFinance = ({ type, accounts, categories }) => {
   const handleAddIncome = async (newIncome) => {
     const account = parseInt(accountRef.current.value);
     const amount = parseFloat(amountRef.current.value);
-    const category = parseInt(categoryRef.current.value);
     const comment = commentRef.current.value;
 
     if (account && amount > 0) {
@@ -72,7 +71,6 @@ export const DrawerAddFinance = ({ type, accounts, categories }) => {
         account: account,
         amount: amount,
         comment: comment,
-        category: category,
       };
 
       const acc = accounts.find((acc) => acc.id === newIncome.account);

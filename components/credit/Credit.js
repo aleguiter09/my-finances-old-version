@@ -35,7 +35,7 @@ const Credit = () => {
         Next month: $50000
       </Heading>
       <Flex my="4" overflowX="auto">
-        <CardComponent title="titulo" amount={200} />
+        <CardComponent title="Title" amount={200} />
       </Flex>
     </>
   );

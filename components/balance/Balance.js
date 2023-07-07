@@ -48,7 +48,12 @@ const Balance = () => {
       </Flex>
       <Flex my="4" overflowX="auto">
         {accounts.map((acc) => (
-          <CardComponent key={acc.id} title={acc.title} amount={acc.amount} />
+          <CardComponent
+            id={acc.id}
+            key={acc.id}
+            title={acc.title}
+            amount={acc.amount}
+          />
         ))}
         <CardButtonComponent />
       </Flex>

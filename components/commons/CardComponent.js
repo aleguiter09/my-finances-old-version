@@ -9,12 +9,12 @@ import {
 import { EditIcon } from "@chakra-ui/icons";
 import { AlertComponent } from "./AlertComponent";
 
-export const CardComponent = ({ key, title, amount }) => {
+export const CardComponent = ({ id = null, title, amount }) => {
   return (
     <>
       <Card minWidth="150" mx="2" color={amount >= 0 ? "white" : "red.500"}>
         <Flex justifyContent="end">
-          <AlertComponent id={key} />
+          <AlertComponent id={id} />
           <EditIcon
             fontSize="sm"
             mt="2"
